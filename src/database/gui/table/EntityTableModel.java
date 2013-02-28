@@ -1,4 +1,4 @@
-package database;
+package database.gui.table;
 
 import database.entity.Column;
 import database.entity.Entity;

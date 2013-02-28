@@ -1,40 +1,40 @@
-package database;
+package database.gui.forms;
 
-import database.entity.Column;
-import database.entity.ColumnType;
-import database.entity.DataBase;
-import database.entity.Entity;
+import database.control.ControllersHolder;
 import database.entity.Table;
-import database.gui.table.AbstractMyTableModel;
+import database.gui.forms.small.AbstractManageDB;
 import database.gui.table.MetadataTableModel;
 import database.gui.table.list.MyListModel;
-import java.util.ArrayList;
-import javax.swing.AbstractListModel;
+import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
-import javax.swing.ListModel;
-import javax.swing.table.TableModel;
 
 public class MainForm
         extends JFrame {
 
+    private ControllersHolder ctls;
     private DataForm dataForm;
-    private DataBase db;
     private int tableListSelectedIndex = -1;
-    private AbstractMyTableModel<Column> metaTableModel;
-    private MyListModel tableListModel;
+    private MetadataTableModel metaTableModel;
+    private MyListModel<Table> tableListModel;
 
     public MainForm () {
-        //createNewDB( null );
+        ctls = new ControllersHolder();
         dataForm = new DataForm( this );
+        this.setLocation( 200, 200 );
+
         initComponents();
 
-        //db = new DataBase( "mock" );
+        updateFormTitle();
+        initModels();
+    }
+
+    private void initModels () {
 
         metaTableModel = new MetadataTableModel();
         dataTable.setModel( metaTableModel );
 
-        //tableListModel = createTableListModel();
-        //tableList.setModel( tableListModel );
+        tableListModel = new MyListModel<Table>();
+        tableList.setModel( tableListModel );
     }
 
     @SuppressWarnings ( "unchecked" )
@@ -51,6 +51,7 @@ public class MainForm
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -104,6 +105,14 @@ public class MainForm
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem7.setText("Перейменувати");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                renameDB(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
         jMenu1.add(jSeparator2);
 
         jMenuItem2.setText("Вiдкрити");
@@ -215,11 +224,24 @@ public class MainForm
     }// </editor-fold>//GEN-END:initComponents
 
     private void createDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDB
-        // TODO add your handling code here:
+        new AbstractManageDB( this, "Створити" ) {
+            @Override
+            protected void okAction ( ActionEvent evt ) {
+                initModels();
+                ctls.getDbCtrl().createDB( this.getDbName() );
+                ctls.getTbCtrl().updateTablesListModel( tableListModel );
+                updateFormTitle();
+                this.dispose();
+            }
+        };
     }//GEN-LAST:event_createDB
 
     private void openDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDB
-        // TODO add your handling code here:
+        initModels();
+        ctls.getDbCtrl().crateMockDB();                                          // to del
+        ctls.getTbCtrl().updateTablesListModel( tableListModel );
+        tableListModel.updateWhenAdded();
+        updateFormTitle();
     }//GEN-LAST:event_openDB
 
     private void saveDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveDB
@@ -235,7 +257,8 @@ public class MainForm
     }//GEN-LAST:event_addTable
 
     private void delTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTable
-        // TODO add your handling code here:
+        Object val = tableList.getSelectedValue();
+        System.out.println( val );
     }//GEN-LAST:event_delTable
 
     private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
@@ -247,85 +270,25 @@ public class MainForm
     }//GEN-LAST:event_delColumn
 
     private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tableSelected
-/*
-    private void showDataForm(java.awt.event.MouseEvent evt) {
-        dataForm.setVisible( true );
-        this.setEnabled( false );
-    }
-
-    private void createNewDB(java.awt.event.MouseEvent evt) {
-        if ( db == null ) {
-            db = new DataBase( "db" );
-            db.setTables( new ArrayList<Table>() );
-        }
-        Table table = new Table( "test" );
-        table.setColumns( new ArrayList<Column>() );
-        Column column1 = new Column( "test col1" );
-        column1.setSimpleType( ColumnType.DATE );
-        Column column2 = new Column( "test col2" );
-        column2.setSimpleType( ColumnType.DATE );
-        Column column3 = new Column( "test col3" );
-        column3.setSimpleType( ColumnType.DATE );
-        table.getColumns().add( column1 );
-        table.getColumns().add( column2 );
-        table.getColumns().add( column3 );
-        table.setData( new ArrayList<Entity>() );
-
-        db.getTables().add( table );
-    }
-
-    private void addTable(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void delTable(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void tableListMouseClicked(java.awt.event.MouseEvent evt) {
-
         int tableIndex = tableList.getSelectedIndex();
 
         if ( tableListSelectedIndex == tableIndex )
             return;
 
-        Table table = db.getTables().get( tableIndex );
-        TableModel bufModel = dataTable.getModel();
+        Table table = tableListModel.getElementAt( tableIndex );
+        ctls.getClCtrl().updateMetadataTableModel( metaTableModel, table.getName() );
+    }//GEN-LAST:event_tableSelected
 
-        if ( bufModel instanceof AbstractMyTableModel ) {
-            AbstractMyTableModel<Column> model = ( AbstractMyTableModel<Column> ) bufModel;
-            model.clear();
-            model.addValues( table.getColumns() );
-        }
-    }
-
-    private void saveDB(java.awt.event.ActionEvent evt) {
-        Table table = new Table( "test1" );
-        table.setColumns( new ArrayList<Column>() );
-        Column column1 = new Column( "test col11" );
-        column1.setSimpleType( ColumnType.DATE );
-        Column column2 = new Column( "test col22" );
-        column2.setSimpleType( ColumnType.DATE );
-        Column column3 = new Column( "test col33" );
-        column3.setSimpleType( ColumnType.DATE );
-        table.getColumns().add( column1 );
-        table.getColumns().add( column2 );
-        table.getColumns().add( column3 );
-        table.setData( new ArrayList<Entity>() );
-
-        db.getTables().add( table );
-        tableListModel.updateWhenAdded();
-        // TODO add your handling code here:
-    }
-*/
-    private MyListModel<Table> createTableListModel () {
-        tableListModel = new MyListModel<Table>( db.getTables() );
-        return tableListModel;
-    }
-
-
+    private void renameDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameDB
+        new AbstractManageDB( this, "Перейменувати" ) {
+            @Override
+            protected void okAction ( ActionEvent evt ) {
+                ctls.getDbCtrl().changeDBName( this.getDbName() );
+                updateFormTitle();
+                this.dispose();
+            }
+        };
+    }//GEN-LAST:event_renameDB
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel1;
@@ -343,6 +306,7 @@ public class MainForm
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -351,4 +315,8 @@ public class MainForm
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JList tableList;
     // End of variables declaration//GEN-END:variables
+
+    public void updateFormTitle () {
+        this.setTitle( "База даних " + ctls.getDbCtrl().getDbName() );
+    }
 }

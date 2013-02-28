@@ -1,6 +1,7 @@
 package database.gui.table.list;
 
 import database.gui.UpdatableModel;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractListModel;
 
@@ -10,8 +11,28 @@ public class MyListModel<T>
 
     protected List<T> data;
 
+    public MyListModel () {
+        this.data = Collections.EMPTY_LIST;
+    }
+
     public MyListModel ( List<T> data ) {
-        this.data = data;
+        this.data = data == null ?
+                    Collections.EMPTY_LIST :
+                    data;
+    }
+
+    public final void updateData ( List<T> data ) {
+
+        if ( data == null )
+            throw new NullPointerException( "Null isn't allowe here" );
+
+        if ( this.data == Collections.EMPTY_LIST )
+            this.data = data;
+        else {
+            this.data.clear();
+            this.data.addAll( data );
+        }
+
     }
 
     @Override
@@ -21,7 +42,15 @@ public class MyListModel<T>
 
     @Override
     public T getElementAt ( int index ) {
-        return data.get( index );
+        
+        T result = null;
+        
+        try {
+            result = data.get( index );
+        } catch ( IndexOutOfBoundsException ex ) {
+        } finally {
+            return result;
+        }
     }
 
     @Override
@@ -37,5 +66,9 @@ public class MyListModel<T>
     @Override
     public void updateWhenRemoved () {
         this.fireIntervalRemoved( this, 0, data.size() );
+    }
+
+    public void clear () {
+        this.data.clear();
     }
 }

@@ -1,4 +1,4 @@
-package database;
+package database.gui.forms;
 
 import javax.swing.JFrame;
 

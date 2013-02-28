@@ -1,11 +1,13 @@
 package database.gui.table;
 
+import database.gui.UpdatableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public abstract class AbstractMyTableModel<T>
-        extends DefaultTableModel {
+        extends DefaultTableModel
+        implements UpdatableModel {
 
     protected List<String[]> data;
     protected int columnCount;
@@ -39,8 +41,19 @@ public abstract class AbstractMyTableModel<T>
         fireTableCellUpdated( row, column );
     }
 
-    protected void update () {
+    @Override
+    public void updateWhenChanged () {
+        fireTableRowsUpdated( 0, data.size() );
+    }
+
+    @Override
+    public void updateWhenAdded () {
         fireTableRowsInserted( 0, data.size() );
+    }
+
+    @Override
+    public void updateWhenRemoved () {
+        fireTableRowsDeleted( 0, data.size() );
     }
 
     public abstract List<T> getData ();
@@ -48,7 +61,7 @@ public abstract class AbstractMyTableModel<T>
     public abstract void addValues ( List<T> values );
 
     public abstract void addValue ( T value );
-    
+
     public void clear () {
         data.clear();
     }

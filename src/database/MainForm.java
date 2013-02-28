@@ -24,7 +24,7 @@ public class MainForm
     private MyListModel tableListModel;
 
     public MainForm () {
-        createNewDB( null );
+        //createNewDB( null );
         dataForm = new DataForm( this );
         initComponents();
 
@@ -56,8 +56,10 @@ public class MainForm
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -67,10 +69,14 @@ public class MainForm
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tableList.setModel(createTableListModel());
-        tableList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableListMouseClicked(evt);
+        tableList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Базу даних не обрано" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        tableList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                tableSelected(evt);
             }
         });
         jScrollPane1.setViewportView(tableList);
@@ -92,60 +98,79 @@ public class MainForm
         jMenu1.setText("База даних");
 
         jMenuItem1.setText("Створити");
-        jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                createNewDB(evt);
-                openDB(evt);
-                saveDB(evt);
-                exit(evt);
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createDB(evt);
             }
         });
         jMenu1.add(jMenuItem1);
         jMenu1.add(jSeparator2);
 
         jMenuItem2.setText("Вiдкрити");
-        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openDB(evt);
             }
         });
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Зверегти");
+        jMenuItem3.setText("Зберегти");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                saveDB(evt);
             }
         });
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Таблиця");
+        jMenu2.setText("Метаданi");
 
-        jMenuItem6.setText("Додати");
-        jMenuItem6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addTable(evt);
+        jMenuItem6.setText("Зберегти");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMetadata(evt);
             }
         });
         jMenu2.add(jMenuItem6);
+        jMenu2.add(jSeparator1);
 
-        jMenuItem7.setText("Видалити");
-        jMenuItem7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jMenu5.setText("Таблиця");
+
+        jMenuItem9.setText("Додати");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTable(evt);
+            }
+        });
+        jMenu5.add(jMenuItem9);
+
+        jMenuItem10.setText("Видалити");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delTable(evt);
             }
         });
-        jMenu2.add(jMenuItem7);
-        jMenu2.add(jSeparator1);
+        jMenu5.add(jMenuItem10);
+
+        jMenu2.add(jMenu5);
 
         jMenu4.setText("Колонка");
 
         jMenuItem4.setText("Додати");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addColumn(evt);
+            }
+        });
         jMenu4.add(jMenuItem4);
 
         jMenuItem8.setText("Видалити");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delColumn(evt);
+            }
+        });
         jMenu4.add(jMenuItem8);
 
         jMenu2.add(jMenu4);
@@ -153,11 +178,6 @@ public class MainForm
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Данi");
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                showDataForm(evt);
-            }
-        });
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -187,19 +207,55 @@ public class MainForm
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void showDataForm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showDataForm
+    private void createDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDB
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createDB
+
+    private void openDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDB
+        // TODO add your handling code here:
+    }//GEN-LAST:event_openDB
+
+    private void saveDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveDB
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveDB
+
+    private void saveMetadata(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMetadata
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveMetadata
+
+    private void addTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTable
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addTable
+
+    private void delTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTable
+        // TODO add your handling code here:
+    }//GEN-LAST:event_delTable
+
+    private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addColumn
+
+    private void delColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delColumn
+        // TODO add your handling code here:
+    }//GEN-LAST:event_delColumn
+
+    private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableSelected
+/*
+    private void showDataForm(java.awt.event.MouseEvent evt) {
         dataForm.setVisible( true );
         this.setEnabled( false );
-    }//GEN-LAST:event_showDataForm
+    }
 
-    private void createNewDB(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createNewDB
+    private void createNewDB(java.awt.event.MouseEvent evt) {
         if ( db == null ) {
             db = new DataBase( "db" );
             db.setTables( new ArrayList<Table>() );
@@ -218,29 +274,17 @@ public class MainForm
         table.setData( new ArrayList<Entity>() );
 
         db.getTables().add( table );
-    }//GEN-LAST:event_createNewDB
+    }
 
-    private void openDB(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openDB
+    private void addTable(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_openDB
+    }
 
-    private void saveDB(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveDB
-        // kill thhis shit
-    }//GEN-LAST:event_saveDB
-
-    private void exit(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exit
-        // kill thhis shit
-    }//GEN-LAST:event_exit
-
-    private void addTable(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTable
+    private void delTable(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_addTable
+    }
 
-    private void delTable(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delTable
-        // TODO add your handling code here:
-    }//GEN-LAST:event_delTable
-
-    private void tableListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableListMouseClicked
+    private void tableListMouseClicked(java.awt.event.MouseEvent evt) {
 
         int tableIndex = tableList.getSelectedIndex();
 
@@ -255,9 +299,9 @@ public class MainForm
             model.clear();
             model.addValues( table.getColumns() );
         }
-    }//GEN-LAST:event_tableListMouseClicked
+    }
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void saveDB(java.awt.event.ActionEvent evt) {
         Table table = new Table( "test1" );
         table.setColumns( new ArrayList<Column>() );
         Column column1 = new Column( "test col11" );
@@ -272,14 +316,16 @@ public class MainForm
         table.setData( new ArrayList<Entity>() );
 
         db.getTables().add( table );
-        tableListModel.update();
+        tableListModel.updateWhenAdded();
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
+    }
+*/
     private MyListModel<Table> createTableListModel () {
         tableListModel = new MyListModel<Table>( db.getTables() );
         return tableListModel;
     }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel1;
@@ -288,15 +334,17 @@ public class MainForm
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;

@@ -50,13 +50,13 @@ public class MetadataTableModel
             addItem( column );
         }
 
-        update();
+        updateWhenAdded();
     }
 
     @Override
     public final void addValue ( Column column ) {
         addItem( column );
-        update();
+        updateWhenAdded();
     }
 
     private void addItem ( Column column ) {

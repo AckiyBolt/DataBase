@@ -1,13 +1,23 @@
 package database.entity;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class Table {
     
     private String name;
-    private Set<Column> columns;
+    private List<Column> columns;
     private Column primaryKey;
+    private List<Entity> data;
+
+    public List<Entity> getData () {
+        return data;
+    }
+
+    public void setData ( List<Entity> data ) {
+        this.data = data;
+    }
 
     public Table ( String name ) {
         this.name = name;
@@ -17,11 +27,11 @@ public class Table {
         return name;
     }
 
-    public Set<Column> getColumns () {
+    public List<Column> getColumns () {
         return columns;
     }
 
-    public void setColumns ( Set<Column> columns ) {
+    public void setColumns ( List<Column> columns ) {
         this.columns = columns;
     }
 
@@ -50,5 +60,10 @@ public class Table {
         if ( !Objects.equals( this.name, other.name ) )
             return false;
         return true;
+    }
+
+    @Override
+    public String toString () {
+        return name;
     }
 }

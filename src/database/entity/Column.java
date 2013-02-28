@@ -1,5 +1,6 @@
 package database.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Column {
@@ -9,6 +10,7 @@ public class Column {
     private ColumnType simpleType;
     // if it's an another table here we will have its name
     private String complexType;
+    private Boolean primaryKey;
 
     public Column ( String name ) {
         this.name = name;
@@ -34,6 +36,14 @@ public class Column {
         this.complexType = complexType;
     }
 
+    public Boolean getPrimaryKey () {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey ( Boolean primaryKey ) {
+        this.primaryKey = primaryKey;
+    }
+
     @Override
     public int hashCode () {
         int hash = 7;
@@ -51,5 +61,10 @@ public class Column {
         if ( !Objects.equals( this.name, other.name ) )
             return false;
         return true;
+    }
+
+    @Override
+    public String toString () {
+        return name;
     }
 }

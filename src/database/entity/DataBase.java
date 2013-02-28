@@ -1,36 +1,32 @@
 package database.entity;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class DataBase {
 
     private String name;
-    private Set<Table> tables;
-    private Set<Entity> data;
+    private List<Table> tables;
 
     public DataBase ( String name ) {
         this.name = name;
     }
-    
+
     public String getName () {
         return name;
     }
 
-    public Set<Table> getTables () {
+    public List<Table> getTables () {
+
+        if ( tables == null )
+            tables = new ArrayList<Table>();
         return tables;
     }
 
-    public void setTables ( Set<Table> tables ) {
+    public void setTables ( List<Table> tables ) {
         this.tables = tables;
-    }
-
-    public Set<Entity> getData () {
-        return data;
-    }
-
-    public void setData ( Set<Entity> data ) {
-        this.data = data;
     }
 
     @Override
@@ -50,5 +46,10 @@ public class DataBase {
         if ( !Objects.equals( this.name, other.name ) )
             return false;
         return true;
+    }
+
+    @Override
+    public String toString () {
+        return name;
     }
 }

@@ -21,4 +21,9 @@ public enum ColumnType {
                false :
                value.matches( regexp );
     }
+
+    @Override
+    public String toString () {
+        return this.name();
+    }
 }

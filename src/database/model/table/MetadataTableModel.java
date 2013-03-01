@@ -1,7 +1,8 @@
-package database.gui.table;
+package database.model.table;
 
 import database.entity.Column;
 import database.entity.ColumnType;
+import database.model.table.AbstractMyTableModel;
 import java.util.LinkedList;
 import java.util.List;
 

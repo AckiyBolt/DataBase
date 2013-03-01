@@ -1,4 +1,4 @@
-package database.gui.table.list;
+package database.model.list;
 
 import database.gui.UpdatableModel;
 import java.util.Collections;
@@ -26,12 +26,7 @@ public class MyListModel<T>
         if ( data == null )
             throw new NullPointerException( "Null isn't allowe here" );
 
-        if ( this.data == Collections.EMPTY_LIST )
-            this.data = data;
-        else {
-            this.data.clear();
-            this.data.addAll( data );
-        }
+        this.data = data;
 
     }
 

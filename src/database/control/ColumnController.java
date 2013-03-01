@@ -1,7 +1,7 @@
 package database.control;
 
 import database.entity.Column;
-import database.gui.table.MetadataTableModel;
+import database.model.table.MetadataTableModel;
 import java.util.List;
 
 public class ColumnController {

@@ -3,8 +3,10 @@ package database.gui.forms;
 import database.control.ControllersHolder;
 import database.entity.Table;
 import database.gui.forms.small.AbstractManageDB;
-import database.gui.table.MetadataTableModel;
-import database.gui.table.list.MyListModel;
+import database.gui.forms.small.AbstractManageColumn;
+import database.gui.forms.small.AbstractManageTable;
+import database.model.table.MetadataTableModel;
+import database.model.list.MyListModel;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
@@ -253,16 +255,30 @@ public class MainForm
     }//GEN-LAST:event_saveMetadata
 
     private void addTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTable
-        // TODO add your handling code here:
+        new AbstractManageTable( this, "Створити" ) {
+            @Override
+            protected void okAction ( ActionEvent evt ) {
+                ctls.getTbCtrl().addTable( new Table( this.getTableName() ), tableListModel);
+                ctls.getTbCtrl().updateTablesListModel( tableListModel );
+                this.dispose();
+            }
+        };
     }//GEN-LAST:event_addTable
 
     private void delTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTable
-        Object val = tableList.getSelectedValue();
-        System.out.println( val );
+        Table table = (Table)tableList.getSelectedValue();
+        ctls.getTbCtrl().delTable( table, tableListModel );
     }//GEN-LAST:event_delTable
 
     private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
-        // TODO add your handling code here:
+//        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables() ) {
+//            @Override
+//            protected void okAction ( ActionEvent evt ) {
+//                
+//                ctls.getTbCtrl().addTable( null, tableListModel );
+//                this.dispose();
+//            }
+//        };
     }//GEN-LAST:event_addColumn
 
     private void delColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delColumn
@@ -276,7 +292,10 @@ public class MainForm
             return;
 
         Table table = tableListModel.getElementAt( tableIndex );
-        ctls.getClCtrl().updateMetadataTableModel( metaTableModel, table.getName() );
+        if (table != null)
+            ctls.getClCtrl().updateMetadataTableModel( metaTableModel, table.getName() );
+        else
+            metaTableModel.clear();
     }//GEN-LAST:event_tableSelected
 
     private void renameDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameDB

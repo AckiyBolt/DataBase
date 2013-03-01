@@ -1,14 +1,10 @@
-package database.gui.table;
+package database.model.table;
 
 import database.entity.Column;
 import database.entity.Entity;
 import database.entity.Table;
 import javax.swing.table.AbstractTableModel;
 
-/**
- *
- * @author T@urus
- */
 public class EntityTableModel
         extends AbstractTableModel {
 

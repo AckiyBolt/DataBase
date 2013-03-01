@@ -3,10 +3,10 @@ package database.gui.forms.small;
 import database.gui.AbstractSubsidiaryForm;
 import javax.swing.JFrame;
 
-public abstract class AbstractManageDB
+public abstract class AbstractManageTable
         extends AbstractSubsidiaryForm {
     
-    public AbstractManageDB ( JFrame mainForm, String okButtonText ) {
+    public AbstractManageTable ( JFrame mainForm, String okButtonText ) {
         super( mainForm );
         okButton.setText( okButtonText );
         cancelButton.setText ("Вiдмiна");
@@ -22,13 +22,13 @@ public abstract class AbstractManageDB
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        dbNameField = new javax.swing.JTextField();
+        tableNameField = new javax.swing.JTextField();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Назва бази даних:");
+        jLabel1.setText("Назва таблицi:");
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -51,7 +51,7 @@ public abstract class AbstractManageDB
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dbNameField)
+                    .addComponent(tableNameField)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -67,7 +67,7 @@ public abstract class AbstractManageDB
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dbNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tableNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -82,8 +82,8 @@ public abstract class AbstractManageDB
 
     protected abstract void okAction(java.awt.event.ActionEvent evt);                         
 
-    protected String getDbName () {
-        return dbNameField.getText();
+    protected String getTableName () {
+        return tableNameField.getText();
     }
     
     private void cancelAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAction
@@ -92,8 +92,8 @@ public abstract class AbstractManageDB
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JTextField dbNameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton okButton;
+    private javax.swing.JTextField tableNameField;
     // End of variables declaration//GEN-END:variables
 }

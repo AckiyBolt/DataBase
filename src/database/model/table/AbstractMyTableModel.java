@@ -1,4 +1,4 @@
-package database.gui.table;
+package database.model.table;
 
 import database.gui.UpdatableModel;
 import java.util.ArrayList;

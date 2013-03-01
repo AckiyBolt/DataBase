@@ -58,8 +58,6 @@ public class MainForm
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
@@ -137,15 +135,6 @@ public class MainForm
 
         jMenu2.setText("Метаданi");
 
-        jMenuItem6.setText("Зберегти");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveMetadata(evt);
-            }
-        });
-        jMenu2.add(jMenuItem6);
-        jMenu2.add(jSeparator1);
-
         jMenu5.setText("Таблиця");
 
         jMenuItem9.setText("Додати");
@@ -189,6 +178,11 @@ public class MainForm
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Данi");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sowDataForm(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -250,15 +244,11 @@ public class MainForm
         // TODO add your handling code here:
     }//GEN-LAST:event_saveDB
 
-    private void saveMetadata(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMetadata
-        // TODO add your handling code here:
-    }//GEN-LAST:event_saveMetadata
-
     private void addTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTable
         new AbstractManageTable( this, "Створити" ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
-                ctls.getTbCtrl().addTable( new Table( this.getTableName() ), tableListModel);
+                ctls.getTbCtrl().addTable( new Table( this.getTableName() ), tableListModel );
                 ctls.getTbCtrl().updateTablesListModel( tableListModel );
                 this.dispose();
             }
@@ -266,33 +256,46 @@ public class MainForm
     }//GEN-LAST:event_addTable
 
     private void delTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTable
-        Table table = (Table)tableList.getSelectedValue();
+        Table table = ( Table ) tableList.getSelectedValue();
         ctls.getTbCtrl().delTable( table, tableListModel );
     }//GEN-LAST:event_delTable
 
     private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
-//        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables() ) {
-//            @Override
-//            protected void okAction ( ActionEvent evt ) {
-//                
-//                ctls.getTbCtrl().addTable( null, tableListModel );
-//                this.dispose();
-//            }
-//        };
+        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables() ) {
+            @Override
+            protected void okAction ( ActionEvent evt ) {
+
+                int tableIndex = tableList.getSelectedIndex();
+                if ( tableListSelectedIndex == tableIndex )
+                    return;
+
+                Table table = tableListModel.getElementAt( tableIndex );
+                ctls.getClCtrl().addColumn( this.getColumn(), table, metaTableModel );
+                this.dispose();
+            }
+        };
     }//GEN-LAST:event_addColumn
 
     private void delColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delColumn
-        // TODO add your handling code here:
-    }//GEN-LAST:event_delColumn
-
-    private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
         int tableIndex = tableList.getSelectedIndex();
-
         if ( tableListSelectedIndex == tableIndex )
             return;
 
         Table table = tableListModel.getElementAt( tableIndex );
-        if (table != null)
+        int[] selectedRows = dataTable.getSelectedRows();
+
+        ctls.getClCtrl().delColumn( selectedRows, table, metaTableModel );
+        if ( metaTableModel.size() > 0 )
+            dataTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
+    }//GEN-LAST:event_delColumn
+
+    private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
+        int tableIndex = tableList.getSelectedIndex();
+        if ( tableListSelectedIndex == tableIndex )
+            return;
+
+        Table table = tableListModel.getElementAt( tableIndex );
+        if ( table != null )
             ctls.getClCtrl().updateMetadataTableModel( metaTableModel, table.getName() );
         else
             metaTableModel.clear();
@@ -308,6 +311,12 @@ public class MainForm
             }
         };
     }//GEN-LAST:event_renameDB
+
+    private void sowDataForm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sowDataForm
+        dataForm.setVisible( true );
+        this.setEnabled( false );
+    }//GEN-LAST:event_sowDataForm
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel1;
@@ -324,13 +333,11 @@ public class MainForm
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JList tableList;
     // End of variables declaration//GEN-END:variables

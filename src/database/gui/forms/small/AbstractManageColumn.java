@@ -1,5 +1,6 @@
 package database.gui.forms.small;
 
+import database.entity.Column;
 import database.entity.ColumnType;
 import database.entity.Table;
 import database.gui.AbstractSubsidiaryForm;
@@ -9,29 +10,29 @@ import javax.swing.JFrame;
 
 public abstract class AbstractManageColumn
         extends AbstractSubsidiaryForm {
-
+    
     private boolean simpleTypeFlag;
     private MyComboBoxModel<String> complexTypeModel;
     private MyComboBoxModel<ColumnType> simpleTypeModel;
-
+    
     public AbstractManageColumn ( JFrame mainForm, String okButtonText, List<Table> tables ) {
         super( mainForm );
         okButton.setText( okButtonText );
         cancelButton.setText( "Вiдмiна" );
-
+        
         initComplexModel( tables );
         initSimpleModel();
     }
-
+    
     @Override
     protected void initForm () {
         initComponents();
         buttonGroup1.add( simpleRB );
         buttonGroup1.add( complexRB );
-
+        
         simpleTypeFlag = true;
     }
-
+    
     @SuppressWarnings ( "unchecked" )
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -136,25 +137,24 @@ public abstract class AbstractManageColumn
     }// </editor-fold>//GEN-END:initComponents
 
     protected abstract void okAction ( java.awt.event.ActionEvent evt );
-
+    
     private void cancelAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAction
         this.dispose();
     }//GEN-LAST:event_cancelAction
-
+    
     private void complexChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_complexChanged
         simpleTypeFlag = false;
         if ( complexTypeModel != null ) {
             typeComboBox.setModel( complexTypeModel );
         }
     }//GEN-LAST:event_complexChanged
-
+    
     private void simpleChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleChanged
         simpleTypeFlag = true;
         if ( simpleTypeModel != null ) {
             typeComboBox.setModel( simpleTypeModel );
         }
     }//GEN-LAST:event_simpleChanged
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelButton;
@@ -174,7 +174,7 @@ public abstract class AbstractManageColumn
             complexTypeModel.addElement( table.getName() );
         }
     }
-
+    
     private void initSimpleModel () {
         simpleTypeModel = new MyComboBoxModel<ColumnType>();
         for ( ColumnType type : ColumnType.values() ) {
@@ -182,7 +182,15 @@ public abstract class AbstractManageColumn
         }
     }
     
-    public String getTableName () {
-        return this.tableNameTextField.getText();
+    protected Column getColumn () {
+        Column result = new Column( this.tableNameTextField.getText() );
+        result.setPrimaryKey( pkCheckBox.isSelected() );
+        result.setComplexType( simpleTypeFlag ?
+                               null :
+                               typeComboBox.getSelectedItem().toString() );
+        result.setSimpleType( simpleTypeFlag ?
+                              ColumnType.valueOf( typeComboBox.getSelectedItem().toString() ) :
+                              null );
+        return result;
     }
 }

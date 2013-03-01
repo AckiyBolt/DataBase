@@ -28,17 +28,8 @@ public class DataForm
         DataTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
 
         jMenuItem5.setText("jMenuItem5");
 
@@ -59,36 +50,11 @@ public class DataForm
 
         jLabel2.setText("Данi:");
 
-        jMenu1.setText("База даних");
-
-        jMenuItem1.setText("Створити");
-        jMenu1.add(jMenuItem1);
-        jMenu1.add(jSeparator2);
-
-        jMenuItem2.setText("Вiдкрити");
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.setText("Зверегти");
-        jMenu1.add(jMenuItem3);
-        jMenu1.add(jSeparator1);
-
-        jMenuItem4.setText("Вихiд");
-        jMenu1.add(jMenuItem4);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Таблиця");
-
-        jMenuItem6.setText("Додати");
-        jMenu2.add(jMenuItem6);
-
-        jMenuItem7.setText("Видалити");
-        jMenu2.add(jMenuItem7);
-
-        jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Данi");
+        jMenu3.setText("Додати");
         jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("Видалити");
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -119,19 +85,10 @@ public class DataForm
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable DataTable;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }

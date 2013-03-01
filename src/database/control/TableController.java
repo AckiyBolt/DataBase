@@ -28,8 +28,10 @@ public class TableController {
     }
 
     public void addTable ( Table table, MyListModel<Table> model ) {
-        getTables().add( table );
-        model.updateWhenAdded();
+        if ( !getTables().contains( table ) ) {
+            getTables().add( table );
+            model.updateWhenAdded();
+        }
     }
 
     public void delTable ( Table table, MyListModel<Table> model ) {

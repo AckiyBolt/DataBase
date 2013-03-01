@@ -1,5 +1,7 @@
 package database;
 
+import database.gui.forms.MainForm;
+
 public class Main {
 
     public static void main ( String[] args ) {

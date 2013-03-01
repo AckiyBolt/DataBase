@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 
 public class MyListModel<T>
-        extends AbstractListModel<T>
+        extends AbstractListModel
         implements UpdatableModel {
 
     protected List<T> data;

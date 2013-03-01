@@ -3,7 +3,6 @@ package database.entity;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class DataBase {
 
@@ -36,7 +35,7 @@ public class DataBase {
     @Override
     public int hashCode () {
         int hash = 7;
-        hash = 89 * hash + Objects.hashCode( this.name );
+        hash = 89 * hash + this.name.hashCode();
         return hash;
     }
 
@@ -47,7 +46,7 @@ public class DataBase {
         if ( getClass() != obj.getClass() )
             return false;
         final DataBase other = ( DataBase ) obj;
-        if ( !Objects.equals( this.name, other.name ) )
+        if ( !this.name.equals( other.name ) )
             return false;
         return true;
     }

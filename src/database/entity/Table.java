@@ -1,8 +1,7 @@
 package database.entity;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 public class Table {
     
@@ -28,6 +27,8 @@ public class Table {
     }
 
     public List<Column> getColumns () {
+        if ( columns == null )
+            columns = new ArrayList<Column>();
         return columns;
     }
 
@@ -46,7 +47,7 @@ public class Table {
     @Override
     public int hashCode () {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode( this.name );
+        hash = 67 * hash + this.name.hashCode();
         return hash;
     }
 
@@ -57,7 +58,7 @@ public class Table {
         if ( getClass() != obj.getClass() )
             return false;
         final Table other = ( Table ) obj;
-        if ( !Objects.equals( this.name, other.name ) )
+        if ( !other.name.equals( this.name ) )
             return false;
         return true;
     }

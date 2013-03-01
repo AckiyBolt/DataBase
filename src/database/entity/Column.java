@@ -1,8 +1,5 @@
 package database.entity;
 
-import java.util.List;
-import java.util.Objects;
-
 public class Column {
 
     private String name;
@@ -47,7 +44,7 @@ public class Column {
     @Override
     public int hashCode () {
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode( this.name );
+        hash = 17 * hash + this.name.hashCode();
         return hash;
     }
 
@@ -58,7 +55,7 @@ public class Column {
         if ( getClass() != obj.getClass() )
             return false;
         final Column other = ( Column ) obj;
-        if ( !Objects.equals( this.name, other.name ) )
+        if ( !other.name.equals( this.name ) )
             return false;
         return true;
     }

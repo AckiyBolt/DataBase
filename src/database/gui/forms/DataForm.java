@@ -1,16 +1,23 @@
 package database.gui.forms;
 
+import database.control.ControllersHolder;
+import database.entity.Table;
+import database.model.table.EntityTableModel;
 import javax.swing.JFrame;
 
 public class DataForm
         extends JFrame {
 
     private JFrame mainForm;
-    
-    public DataForm (JFrame mainForm) {
+    private ControllersHolder ctls;
+    private EntityTableModel entityTableModel;
+
+    public DataForm ( JFrame mainForm, ControllersHolder ctls ) {
         initComponents();
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         this.mainForm = mainForm;
+        this.ctls = ctls;
+        updateFormTitle();
     }
 
     @Override
@@ -25,7 +32,7 @@ public class DataForm
 
         jMenuItem5 = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
-        DataTable = new javax.swing.JTable();
+        dataTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
@@ -35,7 +42,7 @@ public class DataForm
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        DataTable.setModel(new javax.swing.table.DefaultTableModel(
+        dataTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -46,7 +53,7 @@ public class DataForm
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(DataTable);
+        jScrollPane2.setViewportView(dataTable);
 
         jLabel2.setText("Данi:");
 
@@ -81,9 +88,8 @@ public class DataForm
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable DataTable;
+    private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -91,4 +97,34 @@ public class DataForm
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void updateFormTitle () {
+        this.setTitle( "Данi таблицi " + getTableName() );
+    }
+
+    private String getTableName () {
+
+        String result = "";
+
+        try {
+            result = ctls.getEnCtrl().getWorkingTable().getName();
+
+        } catch ( NullPointerException ex ) {
+        }
+
+        return result;
+    }
+
+    void showForTable ( Table table ) {
+        ctls.getEnCtrl().setWorkingTable( table );
+        initData( table );
+        this.setVisible( true );
+        mainForm.setEnabled( false );
+    }
+
+    private void initData ( Table table ) {
+        entityTableModel = new EntityTableModel( table );
+        entityTableModel.addValues( table.getData() );
+        dataTable.setModel( entityTableModel );
+    }
 }

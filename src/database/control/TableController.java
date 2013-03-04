@@ -6,12 +6,11 @@ import database.model.list.MyListModel;
 import java.util.Collections;
 import java.util.List;
 
-public class TableController {
+public class TableController
+        extends AbstractController {
 
-    private ControllersHolder holder;
-
-    TableController ( ControllersHolder holder ) {
-        this.holder = holder;
+    public TableController ( ControllersHolder holder ) {
+        super( holder );
     }
 
     public void updateTablesListModel ( MyListModel<Table> model ) {

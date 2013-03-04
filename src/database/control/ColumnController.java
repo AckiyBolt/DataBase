@@ -8,12 +8,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ColumnController {
+public class ColumnController
+        extends AbstractController {
 
-    private ControllersHolder holder;
-
-    ColumnController ( ControllersHolder holder ) {
-        this.holder = holder;
+    public ColumnController ( ControllersHolder holder ) {
+        super( holder );
     }
 
     public void updateMetadataTableModel ( MetadataTableModel model, String columnName ) {

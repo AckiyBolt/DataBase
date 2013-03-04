@@ -21,7 +21,7 @@ public class MainForm
 
     public MainForm () {
         ctls = new ControllersHolder();
-        dataForm = new DataForm( this );
+        dataForm = new DataForm( this, ctls );
         this.setLocation( 200, 200 );
 
         initComponents();
@@ -313,10 +313,9 @@ public class MainForm
     }//GEN-LAST:event_renameDB
 
     private void sowDataForm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sowDataForm
-        dataForm.setVisible( true );
-        this.setEnabled( false );
+        Table table = ( Table ) tableList.getSelectedValue();
+        dataForm.showForTable( table );
     }//GEN-LAST:event_sowDataForm
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel1;

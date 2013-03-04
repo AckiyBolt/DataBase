@@ -18,6 +18,10 @@ public abstract class AbstractMyTableModel<T>
         data = new ArrayList<String[]>();
     }
 
+    public AbstractMyTableModel ( int columnCount ) {
+        this( null, columnCount );
+    }
+
     @Override
     public int getRowCount () {
         return data == null ?
@@ -65,7 +69,7 @@ public abstract class AbstractMyTableModel<T>
     public void clear () {
         data.clear();
     }
-    
+
     public int size () {
         return this.data.size();
     }

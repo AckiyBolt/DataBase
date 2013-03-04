@@ -7,6 +7,7 @@ public class ControllersHolder {
     private DbController dbCtrl;
     private TableController tbCtrl;
     private ColumnController clCtrl;
+    private EntityController enCtrl;
     private DataProvider provider;
 
     public ControllersHolder () {
@@ -14,6 +15,7 @@ public class ControllersHolder {
         this.dbCtrl = new DbController( this );
         this.tbCtrl = new TableController( this );
         this.clCtrl = new ColumnController( this );
+        this.enCtrl = new EntityController( this );
     }
 
     DataProvider getProvider () {
@@ -30,6 +32,10 @@ public class ControllersHolder {
 
     public ColumnController getClCtrl () {
         return clCtrl;
+    }
+
+    public EntityController getEnCtrl () {
+        return enCtrl;
     }
 
     void dropAllStates ( String string ) {

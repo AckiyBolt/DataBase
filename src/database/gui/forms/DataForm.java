@@ -37,6 +37,7 @@ public class DataForm
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
 
         jMenuItem5.setText("jMenuItem5");
 
@@ -57,11 +58,29 @@ public class DataForm
 
         jLabel2.setText("Данi:");
 
-        jMenu3.setText("Додати");
+        jMenu3.setText("Додати рядок");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addRow(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setText("Видалити");
+        jMenu4.setText("Видалити рядок");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                delRow(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
+
+        jMenu1.setText("Зберегти");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveData(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -88,9 +107,26 @@ public class DataForm
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addRow(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addRow
+        this.entityTableModel.addEmptyRow();
+    }//GEN-LAST:event_addRow
+
+    private void delRow(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delRow
+        int rowIndex = this.dataTable.getSelectedRow();
+        this.entityTableModel.delRowAt( rowIndex );
+    }//GEN-LAST:event_delRow
+
+    private void saveData(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveData
+        boolean isSuccess = ctls.getEnCtrl().saveData( entityTableModel );
+        ctls.showMessage( this );
+        if ( isSuccess )
+            this.dispose();
+    }//GEN-LAST:event_saveData
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
@@ -117,14 +153,10 @@ public class DataForm
 
     void showForTable ( Table table ) {
         ctls.getEnCtrl().setWorkingTable( table );
-        initData( table );
+        entityTableModel = ctls.getEnCtrl().createEntityTableModel();
+        dataTable.setModel( entityTableModel );
+
         this.setVisible( true );
         mainForm.setEnabled( false );
-    }
-
-    private void initData ( Table table ) {
-        entityTableModel = new EntityTableModel( table );
-        entityTableModel.addValues( table.getData() );
-        dataTable.setModel( entityTableModel );
     }
 }

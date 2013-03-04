@@ -6,20 +6,17 @@ public enum ColumnType {
     STRING( "[\\wа-яА-Я]*" ),
     BOOL( "(true|false)?" ),
     DATE( "\\d{2}.\\d{2}.\\d{4}" ),
-    LIST( "^\\[(([\\wа-яА-Я]+, )*[\\wа-яА-Я]+)?\\]$" ),
-    COMPLEX( null );
+    LIST( "^\\[(([\\wа-яА-Я]+, )*[\\wа-яА-Я]+)?\\]$" );
 
     private ColumnType ( String regexp ) {
         this.regexp = regexp;
     }
-    
     private String regexp;
 
     public boolean isValid ( String value ) {
-        
-        return value == null || regexp == null ?
-               false :
-               value.matches( regexp );
+        if ( value == null )
+            value = "";
+        return value.matches( regexp );
     }
 
     @Override

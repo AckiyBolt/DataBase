@@ -1,6 +1,9 @@
 package database.control;
 
 import database.entity.DataBase;
+import java.awt.HeadlessException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class ControllersHolder {
 
@@ -9,6 +12,7 @@ public class ControllersHolder {
     private ColumnController clCtrl;
     private EntityController enCtrl;
     private DataProvider provider;
+    private ErrorHolder errors;
 
     public ControllersHolder () {
         dropAllStates();
@@ -16,12 +20,17 @@ public class ControllersHolder {
         this.tbCtrl = new TableController( this );
         this.clCtrl = new ColumnController( this );
         this.enCtrl = new EntityController( this );
+        this.errors = new ErrorHolder();
     }
 
     DataProvider getProvider () {
         return provider;
     }
 
+    public ErrorHolder getErrors () {
+        return errors;
+    }
+    
     public DbController getDbCtrl () {
         return dbCtrl;
     }
@@ -44,5 +53,12 @@ public class ControllersHolder {
 
     final void dropAllStates () {
         dropAllStates( "вiдсутня" );
+    }
+    
+    public void showMessage (JFrame form)
+            throws HeadlessException {
+        String message = getErrors().getMessageAndClearErrors();
+        if ( !message.isEmpty() )
+            JOptionPane.showMessageDialog( form, message );
     }
 }

@@ -47,12 +47,18 @@ public class ControllersHolder {
         return enCtrl;
     }
 
+    /**
+     * Creates real database with specified name
+     */
     void dropAllStates ( String string ) {
-        provider = new DataProvider( new DataBase( string ) );
+        provider = new DataProvider( new DataBase( string ), false );
     }
 
+    /**
+     * Creates mock database. Just for first run
+     */
     final void dropAllStates () {
-        dropAllStates( "вiдсутня" );
+        provider = new DataProvider( new DataBase( "вiдсутня" ), true );
     }
     
     public void showMessage (JFrame form)
@@ -60,5 +66,11 @@ public class ControllersHolder {
         String message = getErrors().getMessageAndClearErrors();
         if ( !message.isEmpty() )
             JOptionPane.showMessageDialog( form, message );
+    }
+    
+    public void showMessage (JFrame form, String message)
+            throws HeadlessException {
+        getErrors().addError( message );
+        showMessage( form );
     }
 }

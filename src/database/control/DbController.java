@@ -5,6 +5,7 @@ import database.entity.ColumnType;
 import database.entity.DataBase;
 import database.entity.Entity;
 import database.entity.Table;
+import database.model.list.MyListModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,47 +31,50 @@ public class DbController
     }
 
     public void crateMockDB () {
-        holder.dropAllStates();
-        db().setName( "mock" );
+        holder.dropAllStates( "mock" );
         db().setTables( new ArrayList<Table>() );
 
         Table table = new Table( "test" );
         table.setColumns( new ArrayList<Column>() );
-        
+
         Column column1 = new Column( "test col1" );
         column1.setSimpleType( ColumnType.NUMBER );
         column1.setPrimaryKey( Boolean.TRUE );
-        
+
         Column column2 = new Column( "test col2" );
         column2.setSimpleType( ColumnType.STRING );
         column2.setPrimaryKey( Boolean.FALSE );
-        
+
         Column column3 = new Column( "test col3" );
         column3.setSimpleType( ColumnType.STRING );
         column3.setPrimaryKey( Boolean.FALSE );
-        
+
         table.getColumns().add( column1 );
         table.getColumns().add( column2 );
         table.getColumns().add( column3 );
         table.setData( new ArrayList<Entity>() );
         table.setPrimaryKey( column1 );
-        
+
         db().getTables().add( table );
 
         Entity ent = new Entity();
-        Map<String,String> properties = new HashMap<String,String>();
-        properties.put( "test col1", "0000");
-        properties.put( "test col2", "col2");
-        properties.put( "test col3", "col3");
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put( "test col1", "0000" );
+        properties.put( "test col2", "col2" );
+        properties.put( "test col3", "col3" );
         ent.setProperties( properties );
-        
+
         LinkedList<Entity> ents = new LinkedList<Entity>();
         ents.add( ent );
-        
+
         db().getTables().get( 0 ).setData( ents );
     }
 
     public String getDbName () {
         return db().getName();
+    }
+
+    public boolean isExists () {
+        return !holder.getProvider().isMock();
     }
 }

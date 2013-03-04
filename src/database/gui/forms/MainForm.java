@@ -2,11 +2,11 @@ package database.gui.forms;
 
 import database.control.ControllersHolder;
 import database.entity.Table;
-import database.gui.forms.small.AbstractManageDB;
 import database.gui.forms.small.AbstractManageColumn;
+import database.gui.forms.small.AbstractManageDB;
 import database.gui.forms.small.AbstractManageTable;
-import database.model.table.MetadataTableModel;
 import database.model.list.MyListModel;
+import database.model.table.MetadataTableModel;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
@@ -15,7 +15,6 @@ public class MainForm
 
     private ControllersHolder ctls;
     private DataForm dataForm;
-    private int tableListSelectedIndex = -1;
     private MetadataTableModel metaTableModel;
     private MyListModel<Table> tableListModel;
 
@@ -236,7 +235,6 @@ public class MainForm
         initModels();
         ctls.getDbCtrl().crateMockDB();                                          // to del
         ctls.getTbCtrl().updateTablesListModel( tableListModel );
-        tableListModel.updateWhenAdded();
         updateFormTitle();
     }//GEN-LAST:event_openDB
 
@@ -245,31 +243,47 @@ public class MainForm
     }//GEN-LAST:event_saveDB
 
     private void addTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTable
+
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+
         new AbstractManageTable( this, "Створити" ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
+
                 ctls.getTbCtrl().addTable( new Table( this.getTableName() ), tableListModel );
                 ctls.getTbCtrl().updateTablesListModel( tableListModel );
+
                 this.dispose();
             }
         };
     }//GEN-LAST:event_addTable
 
     private void delTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTable
-        Table table = ( Table ) tableList.getSelectedValue();
+
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+
+        Table table = getTableListSelectedTable();
         ctls.getTbCtrl().delTable( table, tableListModel );
     }//GEN-LAST:event_delTable
 
     private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
+
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+        
         new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables() ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
 
-                int tableIndex = tableList.getSelectedIndex();
-                if ( tableListSelectedIndex == tableIndex )
-                    return;
-
-                Table table = tableListModel.getElementAt( tableIndex );
+                Table table = getTableListSelectedTable();
                 ctls.getClCtrl().addColumn( this.getColumn(), table, metaTableModel );
                 this.dispose();
             }
@@ -277,24 +291,26 @@ public class MainForm
     }//GEN-LAST:event_addColumn
 
     private void delColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delColumn
-        int tableIndex = tableList.getSelectedIndex();
-        if ( tableListSelectedIndex == tableIndex )
-            return;
 
-        Table table = tableListModel.getElementAt( tableIndex );
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+        
+        Table table = getTableListSelectedTable();
         int[] selectedRows = dataTable.getSelectedRows();
 
         ctls.getClCtrl().delColumn( selectedRows, table, metaTableModel );
+        
+        // clear columns table
         if ( metaTableModel.size() > 0 )
             dataTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
     }//GEN-LAST:event_delColumn
 
     private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
-        int tableIndex = tableList.getSelectedIndex();
-        if ( tableListSelectedIndex == tableIndex )
-            return;
+        
+        Table table = ( Table ) tableList.getSelectedValue();
 
-        Table table = tableListModel.getElementAt( tableIndex );
         if ( table != null )
             ctls.getClCtrl().updateMetadataTableModel( metaTableModel, table.getName() );
         else
@@ -302,6 +318,12 @@ public class MainForm
     }//GEN-LAST:event_tableSelected
 
     private void renameDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameDB
+
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+        
         new AbstractManageDB( this, "Перейменувати" ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
@@ -313,8 +335,15 @@ public class MainForm
     }//GEN-LAST:event_renameDB
 
     private void sowDataForm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sowDataForm
-        Table table = ( Table ) tableList.getSelectedValue();
-        dataForm.showForTable( table );
+        
+        if ( !ctls.getDbCtrl().isExists() ) {
+            ctls.showMessage( this, "База даних вiдсутня." );
+            return;
+        }
+        
+        Table table = getTableListSelectedTable();
+        if ( table != null )
+            dataForm.showForTable( table );
     }//GEN-LAST:event_sowDataForm
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;
@@ -341,7 +370,14 @@ public class MainForm
     private javax.swing.JList tableList;
     // End of variables declaration//GEN-END:variables
 
-    public void updateFormTitle () {
+    private void updateFormTitle () {
         this.setTitle( "База даних " + ctls.getDbCtrl().getDbName() );
+    }
+
+    private Table getTableListSelectedTable () {
+        Table table = ( Table ) tableList.getSelectedValue();
+        if ( table == null )
+            ctls.showMessage( this, "Ви не обрали таблицю." );
+        return table;
     }
 }

@@ -14,6 +14,7 @@ public class DataForm
 
     public DataForm ( JFrame mainForm, ControllersHolder ctls ) {
         initComponents();
+        this.setLocation( 200, 200 );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         this.mainForm = mainForm;
         this.ctls = ctls;

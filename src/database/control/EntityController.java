@@ -53,16 +53,15 @@ public class EntityController
     }
     
     private boolean validate ( List<Entity> data ) {
-        boolean checkType = false;
-        boolean checkPK = false;
+        boolean result = false;
         
         for ( Entity entity : data ) {
             for ( Column column : workingTable.getColumns() ) {
-                checkType = checkType( column, entity );
+                result = checkType( column, entity ) & result;
             }
         }
         
-        return checkType;
+        return result;
     }
     
     private boolean checkType ( Column column, Entity entity ) {

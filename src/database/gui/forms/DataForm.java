@@ -115,7 +115,12 @@ public class DataForm
 
     private void delRow(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delRow
         int rowIndex = this.dataTable.getSelectedRow();
-        this.entityTableModel.delRowAt( rowIndex );
+        
+        if ( rowIndex != -1 )
+            this.entityTableModel.delRowAt( rowIndex );
+        else {
+            ctls.showMessage( this, "Рядок не обрано." );
+        }
     }//GEN-LAST:event_delRow
 
     private void saveData(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveData

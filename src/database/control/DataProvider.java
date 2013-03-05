@@ -15,15 +15,11 @@ class DataProvider {
     private boolean isMock;
     private DataBase db;
     private Map<String, Table> tblCache;
-    private Map<String, Column> colCache;
-    private Map<String, Entity> entCache;
 
     public DataProvider ( DataBase db, boolean isMock ) {
         this.isMock = isMock;
         this.db = db;
         this.tblCache = new HashMap<String, Table>();
-        this.colCache = new HashMap<String, Column>();
-        this.entCache = new HashMap<String, Entity>();
     }
 
     public DataBase getDB () {

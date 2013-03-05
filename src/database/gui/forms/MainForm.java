@@ -297,7 +297,7 @@ public class MainForm
         if ( table == null )
             return;
 
-        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables(), ctls.getErrors() ) {
+        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables(), ctls.getErrors(), table.getPrimaryKey() == null ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
 

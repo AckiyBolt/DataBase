@@ -1,6 +1,5 @@
 package database.gui.forms.small;
 
-import database.control.ControllersHolder;
 import database.control.ErrorHolder;
 import database.entity.Column;
 import database.entity.ColumnType;
@@ -14,18 +13,18 @@ public abstract class AbstractManageColumn
         extends AbstractSubsidiaryForm {
 
     private Boolean simpleTypeFlag;
-    private MyComboBoxModel<String> complexTypeModel;
     private MyComboBoxModel<ColumnType> simpleTypeModel;
     private ErrorHolder holder;
+    private List<Table> tables;
 
-    public AbstractManageColumn ( JFrame mainForm, String okButtonText, List<Table> tables, ErrorHolder holder ) {
+    public AbstractManageColumn ( JFrame mainForm, String okButtonText, List<Table> tables, ErrorHolder holder, boolean pkEnabeled ) {
         super( mainForm );
 
         this.okButton.setText( okButtonText );
         this.cancelButton.setText( "Вiдмiна" );
         this.holder = holder;
-
-        initComplexModel( tables );
+        this.tables = tables;
+        this.pkCheckBox.setEnabled( pkEnabeled );
         initSimpleModel();
     }
 
@@ -149,9 +148,7 @@ public abstract class AbstractManageColumn
 
     private void complexChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_complexChanged
         simpleTypeFlag = false;
-        if ( complexTypeModel != null ) {
-            typeComboBox.setModel( complexTypeModel );
-        }
+        typeComboBox.setModel( initComplexModel() );
     }//GEN-LAST:event_complexChanged
 
     private void simpleChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleChanged
@@ -173,11 +170,13 @@ public abstract class AbstractManageColumn
     private javax.swing.JComboBox typeComboBox;
     // End of variables declaration//GEN-END:variables
 
-    private void initComplexModel ( List<Table> tables ) {
-        complexTypeModel = new MyComboBoxModel<String>();
+    private MyComboBoxModel<String> initComplexModel () {
+        MyComboBoxModel<String> complexTypeModel = new MyComboBoxModel<String>();
         for ( Table table : tables ) {
-            complexTypeModel.addElement( table.getName() );
+            if ( table.getPrimaryKey() != null )
+                complexTypeModel.addElement( table.getName() );
         }
+        return complexTypeModel;
     }
 
     private void initSimpleModel () {
@@ -200,7 +199,7 @@ public abstract class AbstractManageColumn
     }
 
     protected boolean checkData () {
-        
+
         String name = this.tableNameTextField.getText();
         if ( name == null || name.isEmpty() )
             holder.addError( "Назва порожня." );

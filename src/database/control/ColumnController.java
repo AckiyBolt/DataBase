@@ -32,24 +32,31 @@ public class ColumnController
 
         List<Column> columns = holder.getProvider().getColumns( table.getName() );
         columns.add( column );
+        if ( column.getPrimaryKey() )
+            table.setPrimaryKey( column );
+
         model.clear();
         model.addValues( columns );
         model.updateWhenAdded();
     }
 
-    public void delColumn ( int [] indexes, Table table, MetadataTableModel model ) {
-        
+    public void delColumn ( int[] indexes, Table table, MetadataTableModel model ) {
+
         if ( indexes == null || table == null || model == null )
             return;
 
         List<Column> columns = holder.getProvider().getColumns( table.getName() );
         List<Column> columnsToDel = new LinkedList<Column>();
-        
-        for ( int i : indexes )
-            columnsToDel.add( columns.get( i ) );
-        
+
+        for ( int i : indexes ) {
+            Column column = columns.get( i );
+            columnsToDel.add( column );
+            if (column.getPrimaryKey())
+                table.setPrimaryKey( null );
+        }
+
         columns.removeAll( columnsToDel );
-        
+
         model.clear();
         model.addValues( columns );
         model.updateWhenAdded();

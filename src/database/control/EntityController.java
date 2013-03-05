@@ -42,29 +42,29 @@ public class EntityController
      * @return true - if action was successful. false - otherwise
      */
     public boolean saveData ( EntityTableModel entityTableModel ) {
-        boolean result = false;
+        
         List<Entity> data = entityTableModel.getData();
         
-        if ( validate( data ) ) {
+        validate( data );
+        boolean isValid = this.holder.getErrors().getMessage().isEmpty();
+        
+        if ( isValid ) {
             workingTable.setData( data );
-            result = true;
         }
-        return result;
+        
+        return isValid;
     }
     
-    private boolean validate ( List<Entity> data ) {
-        boolean result = false;
+    private void validate ( List<Entity> data ) {
         
         for ( Entity entity : data ) {
             for ( Column column : workingTable.getColumns() ) {
-                result = checkType( column, entity ) & result;
+                checkType( column, entity );
             }
         }
-        
-        return result;
     }
     
-    private boolean checkType ( Column column, Entity entity ) {
+    private void checkType ( Column column, Entity entity ) {
         boolean isSimple = column.getSimpleType() != null;
         String value = entity.getProperties().get( column.getName() );
                 
@@ -85,7 +85,5 @@ public class EntityController
         
         if ( !isValid )
             this.holder.getErrors().addError( "Не вiрне значення: " + value );
-        
-        return isValid;
     }
 }

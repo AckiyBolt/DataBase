@@ -32,8 +32,9 @@ public class MainForm
     private void initModels () {
 
         metaTableModel = new MetadataTableModel();
-        dataTable.setModel( metaTableModel );
-
+        metaTable.setModel( metaTableModel );
+        
+        
         tableListModel = new MyListModel<Table>();
         tableList.setModel( tableListModel );
     }
@@ -47,7 +48,7 @@ public class MainForm
         tableList = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        dataTable = new javax.swing.JTable();
+        metaTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -83,7 +84,7 @@ public class MainForm
 
         jLabel1.setText("Таблицi:");
 
-        dataTable.setModel(new javax.swing.table.DefaultTableModel(
+        metaTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null}
             },
@@ -91,7 +92,9 @@ public class MainForm
                 "Заголовок 1"
             }
         ));
-        jScrollPane2.setViewportView(dataTable);
+        metaTable.setRowSelectionAllowed(true);
+        metaTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(metaTable);
 
         jLabel2.setText("Метаданi:");
 
@@ -256,6 +259,10 @@ public class MainForm
                 ctls.getTbCtrl().addTable( new Table( this.getTableName() ), tableListModel );
                 ctls.getTbCtrl().updateTablesListModel( tableListModel );
 
+                if ( tableListModel.getSize() > 0 )
+                    tableList.removeSelectionInterval( 0, tableListModel.getSize() - 1 );
+                metaTableModel.clear();
+
                 this.dispose();
             }
         };
@@ -273,6 +280,10 @@ public class MainForm
             return;
 
         ctls.getTbCtrl().delTable( table, tableListModel );
+
+        if ( tableListModel.getSize() > 0 )
+            tableList.removeSelectionInterval( 0, tableListModel.getSize() - 1 );
+        metaTableModel.clear();
     }//GEN-LAST:event_delTable
 
     private void addColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addColumn
@@ -299,6 +310,9 @@ public class MainForm
                 this.dispose();
             }
         };
+
+        if ( metaTableModel.size() > 0 )
+            metaTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
     }//GEN-LAST:event_addColumn
 
     private void delColumn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delColumn
@@ -312,13 +326,12 @@ public class MainForm
         if ( table == null )
             return;
 
-        int[] selectedRows = dataTable.getSelectedRows();
+        int[] selectedRows = metaTable.getSelectedRows();
 
         ctls.getClCtrl().delColumn( selectedRows, table, metaTableModel );
 
-        // clear columns table
         if ( metaTableModel.size() > 0 )
-            dataTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
+            metaTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
     }//GEN-LAST:event_delColumn
 
     private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
@@ -362,7 +375,6 @@ public class MainForm
         dataForm.showForTable( table );
     }//GEN-LAST:event_sowDataForm
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable dataTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
@@ -383,6 +395,7 @@ public class MainForm
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JTable metaTable;
     private javax.swing.JList tableList;
     // End of variables declaration//GEN-END:variables
 

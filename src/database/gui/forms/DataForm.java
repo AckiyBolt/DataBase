@@ -55,6 +55,7 @@ public class DataForm
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        dataTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(dataTable);
 
         jLabel2.setText("Данi:");

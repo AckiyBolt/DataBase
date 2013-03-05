@@ -68,6 +68,7 @@ public abstract class AbstractMyTableModel<T>
 
     public void clear () {
         data.clear();
+        updateWhenRemoved ();
     }
 
     public int size () {

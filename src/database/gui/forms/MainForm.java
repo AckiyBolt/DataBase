@@ -269,6 +269,9 @@ public class MainForm
         }
 
         Table table = getTableListSelectedTable();
+        if ( table == null )
+            return;
+
         ctls.getTbCtrl().delTable( table, tableListModel );
     }//GEN-LAST:event_delTable
 
@@ -278,12 +281,20 @@ public class MainForm
             ctls.showMessage( this, "База даних вiдсутня." );
             return;
         }
-        
-        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables() ) {
+
+        final Table table = getTableListSelectedTable();
+        if ( table == null )
+            return;
+
+        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables(), ctls.getErrors() ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
 
-                Table table = getTableListSelectedTable();
+                if ( !this.checkData() ) {
+                    ctls.showMessage( this );
+                    return;
+                }
+
                 ctls.getClCtrl().addColumn( this.getColumn(), table, metaTableModel );
                 this.dispose();
             }
@@ -296,19 +307,22 @@ public class MainForm
             ctls.showMessage( this, "База даних вiдсутня." );
             return;
         }
-        
+
         Table table = getTableListSelectedTable();
+        if ( table == null )
+            return;
+
         int[] selectedRows = dataTable.getSelectedRows();
 
         ctls.getClCtrl().delColumn( selectedRows, table, metaTableModel );
-        
+
         // clear columns table
         if ( metaTableModel.size() > 0 )
             dataTable.removeRowSelectionInterval( 0, metaTableModel.size() - 1 );
     }//GEN-LAST:event_delColumn
 
     private void tableSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tableSelected
-        
+
         Table table = ( Table ) tableList.getSelectedValue();
 
         if ( table != null )
@@ -323,7 +337,7 @@ public class MainForm
             ctls.showMessage( this, "База даних вiдсутня." );
             return;
         }
-        
+
         new AbstractManageDB( this, "Перейменувати" ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
@@ -335,15 +349,17 @@ public class MainForm
     }//GEN-LAST:event_renameDB
 
     private void sowDataForm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sowDataForm
-        
+
         if ( !ctls.getDbCtrl().isExists() ) {
             ctls.showMessage( this, "База даних вiдсутня." );
             return;
         }
-        
+
         Table table = getTableListSelectedTable();
-        if ( table != null )
-            dataForm.showForTable( table );
+        if ( table == null )
+            return;
+
+        dataForm.showForTable( table );
     }//GEN-LAST:event_sowDataForm
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable dataTable;

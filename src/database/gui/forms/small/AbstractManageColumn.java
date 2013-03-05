@@ -1,5 +1,7 @@
 package database.gui.forms.small;
 
+import database.control.ControllersHolder;
+import database.control.ErrorHolder;
 import database.entity.Column;
 import database.entity.ColumnType;
 import database.entity.Table;
@@ -10,29 +12,32 @@ import javax.swing.JFrame;
 
 public abstract class AbstractManageColumn
         extends AbstractSubsidiaryForm {
-    
-    private boolean simpleTypeFlag;
+
+    private Boolean simpleTypeFlag;
     private MyComboBoxModel<String> complexTypeModel;
     private MyComboBoxModel<ColumnType> simpleTypeModel;
-    
-    public AbstractManageColumn ( JFrame mainForm, String okButtonText, List<Table> tables ) {
+    private ErrorHolder holder;
+
+    public AbstractManageColumn ( JFrame mainForm, String okButtonText, List<Table> tables, ErrorHolder holder ) {
         super( mainForm );
-        okButton.setText( okButtonText );
-        cancelButton.setText( "Вiдмiна" );
-        
+
+        this.okButton.setText( okButtonText );
+        this.cancelButton.setText( "Вiдмiна" );
+        this.holder = holder;
+
         initComplexModel( tables );
         initSimpleModel();
     }
-    
+
     @Override
     protected void initForm () {
         initComponents();
         buttonGroup1.add( simpleRB );
         buttonGroup1.add( complexRB );
-        
+
         simpleTypeFlag = true;
     }
-    
+
     @SuppressWarnings ( "unchecked" )
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -137,18 +142,18 @@ public abstract class AbstractManageColumn
     }// </editor-fold>//GEN-END:initComponents
 
     protected abstract void okAction ( java.awt.event.ActionEvent evt );
-    
+
     private void cancelAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAction
         this.dispose();
     }//GEN-LAST:event_cancelAction
-    
+
     private void complexChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_complexChanged
         simpleTypeFlag = false;
         if ( complexTypeModel != null ) {
             typeComboBox.setModel( complexTypeModel );
         }
     }//GEN-LAST:event_complexChanged
-    
+
     private void simpleChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpleChanged
         simpleTypeFlag = true;
         if ( simpleTypeModel != null ) {
@@ -174,14 +179,14 @@ public abstract class AbstractManageColumn
             complexTypeModel.addElement( table.getName() );
         }
     }
-    
+
     private void initSimpleModel () {
         simpleTypeModel = new MyComboBoxModel<ColumnType>();
         for ( ColumnType type : ColumnType.values() ) {
             simpleTypeModel.addElement( type );
         }
     }
-    
+
     protected Column getColumn () {
         Column result = new Column( this.tableNameTextField.getText() );
         result.setPrimaryKey( pkCheckBox.isSelected() );
@@ -192,5 +197,18 @@ public abstract class AbstractManageColumn
                               ColumnType.valueOf( typeComboBox.getSelectedItem().toString() ) :
                               null );
         return result;
+    }
+
+    protected boolean checkData () {
+        
+        String name = this.tableNameTextField.getText();
+        if ( name == null || name.isEmpty() )
+            holder.addError( "Назва порожня." );
+
+        Object type = typeComboBox.getSelectedItem();
+        if ( type == null )
+            holder.addError( "Тип не обрано." );
+
+        return holder.getMessage().isEmpty();
     }
 }

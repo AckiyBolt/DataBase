@@ -9,6 +9,9 @@ public class Column {
     private String complexType;
     private Boolean primaryKey;
 
+    public Column () {
+    }
+
     public Column ( String name ) {
         this.name = name;
     }

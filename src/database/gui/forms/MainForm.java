@@ -8,7 +8,9 @@ import database.gui.forms.small.AbstractManageTable;
 import database.model.list.MyListModel;
 import database.model.table.MetadataTableModel;
 import java.awt.event.ActionEvent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class MainForm
         extends JFrame {
@@ -33,8 +35,8 @@ public class MainForm
 
         metaTableModel = new MetadataTableModel();
         metaTable.setModel( metaTableModel );
-        
-        
+
+
         tableListModel = new MyListModel<Table>();
         tableList.setModel( tableListModel );
     }
@@ -227,6 +229,7 @@ public class MainForm
             protected void okAction ( ActionEvent evt ) {
                 initModels();
                 ctls.getDbCtrl().createDB( this.getDbName() );
+                //ctls.getDbCtrl().crateMockDB(); 
                 ctls.getTbCtrl().updateTablesListModel( tableListModel );
                 updateFormTitle();
                 this.dispose();
@@ -236,13 +239,13 @@ public class MainForm
 
     private void openDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDB
         initModels();
-        ctls.getDbCtrl().crateMockDB();                                          // to del
+        ctls.getDbCtrl().openDB( this );
         ctls.getTbCtrl().updateTablesListModel( tableListModel );
         updateFormTitle();
     }//GEN-LAST:event_openDB
 
     private void saveDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveDB
-        // TODO add your handling code here:
+        ctls.getDbCtrl().saveDB( this );
     }//GEN-LAST:event_saveDB
 
     private void addTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTable
@@ -260,7 +263,8 @@ public class MainForm
                 ctls.getTbCtrl().updateTablesListModel( tableListModel );
 
                 if ( tableListModel.getSize() > 0 )
-                    tableList.removeSelectionInterval( 0, tableListModel.getSize() - 1 );
+                    tableList.removeSelectionInterval( 0, tableListModel.getSize()
+                                                          - 1 );
                 metaTableModel.clear();
 
                 this.dispose();
@@ -297,7 +301,8 @@ public class MainForm
         if ( table == null )
             return;
 
-        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables(), ctls.getErrors(), table.getPrimaryKey() == null ) {
+        new AbstractManageColumn( this, "Створити", ctls.getTbCtrl().getTables(), ctls.getErrors(), table.getPrimaryKey()
+                                                                                                    == null ) {
             @Override
             protected void okAction ( ActionEvent evt ) {
 

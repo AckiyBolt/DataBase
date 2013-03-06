@@ -1,21 +1,32 @@
 package database.control;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import database.control.file.FileController;
 import database.entity.Column;
 import database.entity.ColumnType;
 import database.entity.DataBase;
 import database.entity.Entity;
 import database.entity.Table;
 import database.model.list.MyListModel;
+import java.awt.Component;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import javax.swing.JFrame;
 
 public class DbController
         extends AbstractController {
 
+    private FileController fileCtlr;
+    private Gson gson;
+
     public DbController ( ControllersHolder holder ) {
         super( holder );
+        this.fileCtlr = new FileController();
+        gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     private DataBase db () {
@@ -24,6 +35,29 @@ public class DbController
 
     public void createDB ( String name ) {
         holder.dropAllStates( name );
+    }
+
+    public void openDB ( JFrame parentComponent ) {
+        String json = fileCtlr.readFile( parentComponent, holder.getErrors() );
+        
+        if (json == null){
+            holder.showMessage( parentComponent );
+            return;
+        }
+        
+        DataBase db = gson.fromJson( json, DataBase.class );
+        this.holder.getProvider().setDB( db );
+    }
+
+    public void saveDB ( JFrame parentComponent ) {
+        String json = gson.toJson( holder.getProvider().getDB() );
+        
+        if (json == null){
+            holder.showMessage( parentComponent );
+            return;
+        }
+        
+        fileCtlr.writeFile( parentComponent, holder.getErrors(), json );
     }
 
     public void changeDBName ( String name ) {

@@ -1,6 +1,5 @@
 package database.entity;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,9 @@ public class DataBase {
 
     private String name;
     private List<Table> tables;
+
+    public DataBase () {
+    }
 
     public DataBase ( String name ) {
         this.name = name;
@@ -22,7 +24,6 @@ public class DataBase {
     }
 
     public List<Table> getTables () {
-
         if ( tables == null )
             tables = new ArrayList<Table>();
         return tables;

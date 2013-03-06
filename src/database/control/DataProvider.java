@@ -81,4 +81,10 @@ class DataProvider {
     public boolean isMock () {
         return isMock;
     }
+
+    void setDB ( DataBase db ) {
+        tblCache.clear();
+        this.db = db;
+        isMock = false;
+    }
 }

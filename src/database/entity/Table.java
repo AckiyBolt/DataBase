@@ -10,16 +10,21 @@ public class Table {
     private Column primaryKey;
     private List<Entity> data;
 
+    public Table () {
+    }
+
+    public Table ( String name ) {
+        this.name = name;
+    }
+
     public List<Entity> getData () {
+        if (data == null)
+            data = new ArrayList<Entity>();
         return data;
     }
 
     public void setData ( List<Entity> data ) {
         this.data = data;
-    }
-
-    public Table ( String name ) {
-        this.name = name;
     }
 
     public String getName () {

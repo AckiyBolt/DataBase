@@ -72,7 +72,7 @@ public class DbController
         table.setColumns( new ArrayList<Column>() );
 
         Column column1 = new Column( "test col1" );
-        column1.setSimpleType( ColumnType.NUMBER );
+        column1.setSimpleType( ColumnType.INTEGER );
         column1.setPrimaryKey( Boolean.TRUE );
 
         Column column2 = new Column( "test col2" );

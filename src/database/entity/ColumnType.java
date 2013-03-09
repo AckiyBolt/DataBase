@@ -24,7 +24,7 @@ public enum ColumnType {
 
         boolean result = value.matches( regexp );
 
-        if ( this == DATE )
+        if ( this == DATE && !value.isEmpty() )
             result = validateDate( value ) && result;
 
         return result;

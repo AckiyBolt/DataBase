@@ -5,10 +5,14 @@ import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.print.DocFlavor;
@@ -30,10 +34,9 @@ public class FileController {
             return null;
 
         try {
-            BufferedReader input = new BufferedReader( new FileReader( file ) );
+            BufferedReader input = new BufferedReader( new InputStreamReader( new FileInputStream(file), "UTF-8" ) );
 
             String tmp;
-
             while ( ( tmp = input.readLine() ) != null )
                 sb.append( tmp ).append( "\n" );
 
@@ -60,7 +63,7 @@ public class FileController {
             return;
 
         try {
-            BufferedWriter output = new BufferedWriter( new FileWriter( file ) );
+            BufferedWriter output = new BufferedWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
             output.write( content );
             output.close();
 
